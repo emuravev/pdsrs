@@ -119,7 +119,7 @@ class Compare(Expression):
 		return list(zip(x, y))
 
 	def __str__(self):
-		return '&&'.join([str(x) + '=' + str(y) for x, y in self.content])
+		return '&'.join(['(' + str(x) + '<->' + str(y)+')' for x, y in self.content])
 
 class Addition(Expression):
 	def __init__(self, x, y):
@@ -152,7 +152,7 @@ class Addition(Expression):
 		carry = x[0] + '&&' + y[0]
 		for i in range(1, len(x)):
 			z += [(x[i] + '^' + y[i] + '^(' + carry + ')', (x[i], y[i], carry))]
-			carry = '({}&&{})||({}&&{})||({}&&{})'.format(x[i], y[i], x[i], carry, y[i], carry)
+			carry = '({} & {}) | ({} & {}) | ({} & {})'.format(x[i], y[i], x[i], carry, y[i], carry)
 		return list(reversed(z))
 
 	def __eq__(self, other):
@@ -164,7 +164,7 @@ class Addition(Expression):
 
 	def __str__(self):
 		#!
-		return '&&'.join([str(val)+'=('+'^'.join(map(str, c)) + ')' for val, c in self.content])
+		return ' & '.join(['(' + str(val)+' <-> ('+' ^ '.join(map(str, c)) + '))' for val, c in self.content])
 
 class  GreaterThen(Expression):
 	def __init__(self, x, y):
@@ -190,7 +190,7 @@ class  GreaterThen(Expression):
 
 	def __str__(self):
 		#!
-		return '='.join(map(str, self.content))
+		return '<->'.join(map(str, self.content))
 
 class  LessThen(Expression):
 	def __init__(self, x, y):
@@ -216,4 +216,4 @@ class  LessThen(Expression):
 
 	def __str__(self):
 		#!
-		return '='.join(map(str, self.content))
+		return '<->'.join(map(str, self.content))
