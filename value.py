@@ -15,6 +15,21 @@ class Expression(object):
 	def __eq__(self, other):
 		raise NotImplementedError
 
+	def __resolve_one(self):
+		return '(__true__ | !__true__)'
+
+	def __resolve_zero(self):
+		return '(__false__ & !__false__)'
+
+	def resolve_variable(self, var):
+		if isinstance(var, int):
+			if var == 0:
+				return self.__resolve_zero()
+			elif var == 1:
+				return self.__resolve_one()
+		elif isinstance(var, str):
+			return var
+
 
 class Value(Expression):
 	def __init__(self):
@@ -94,7 +109,7 @@ class VarValue(Value):
 		return list(map(lambda a: (1 if a == 1 else 0), name))
 
 	def __neg__(self):
-		x = list(map(lambda a: '~' + a, self.content))
+		x = list(map(lambda a: '!' + a, self.content))
 		x = list(map(lambda a: a[0], VarValue(x) + IntValue(1)))
 		return VarValue(x)
 
@@ -119,7 +134,11 @@ class Compare(Expression):
 		return list(zip(x, y))
 
 	def __str__(self):
-		return '&'.join(['(' + str(x) + '<->' + str(y)+')' for x, y in self.content])
+		return ' & '.join(['(' + self.resolve_variable(x) + ' <-> '\
+					 + self.resolve_variable(y) + ')' for x, y in self.content])
+
+	def resolve_variable(self, var):
+		return super().resolve_variable(var)
 
 class Addition(Expression):
 	def __init__(self, x, y):
@@ -146,14 +165,23 @@ class Addition(Expression):
 		return list(reversed(z))
 
 	def __varvar_create(self, x, y):
-		#correctness checked via https://web.stanford.edu/class/cs103/tools/truth-table-tool/
-		x, y = list(map(str, reversed(x))), list(map(str,reversed(y)))
-		z = [(x[0] + '^' + y[0], (x[0],y[0]))]
-		carry = x[0] + '&&' + y[0]
+		x, y = list(map(str, reversed(x))), list(map(self.resolve_variable,reversed(y)))
+		z = [(self.__resolve_xor([x[0], y[0]]), (x[0],y[0]))]
+		carry = self.resolve_variable(x[0]) + ' & ' + self.resolve_variable(y[0])
 		for i in range(1, len(x)):
-			z += [(x[i] + '^' + y[i] + '^(' + carry + ')', (x[i], y[i], carry))]
-			carry = '({} & {}) | ({} & {}) | ({} & {})'.format(x[i], y[i], x[i], carry, y[i], carry)
+			z += [(self.__resolve_xor([x[i], y[i], carry]), (x[i], y[i], carry))]
+			carry = '({} & {}) | ({} & {}) | ({} & {})'.format(*list(map(self.resolve_variable, \
+						[x[i], y[i], x[i], carry, y[i], carry])))
 		return list(reversed(z))
+
+	def __resolve_xor(self, vars):
+		if len(vars) == 2:
+			return '(!{0} & {1}) | ({0} & !{1})'.format(*list(map(self.resolve_variable, vars)))
+		elif len(vars) == 3:
+			return '(!{0} & !{1} & {2}) | (!{0} & {1} & !{2}) | ({0} & !{1} & !{2}) | ({0} & {1} & {2})'\
+					.format(*list(map(self.resolve_variable, vars)))
+		else:
+			raise NotImplementedError
 
 	def __eq__(self, other):
 		if type(other) == Addition:
@@ -164,7 +192,11 @@ class Addition(Expression):
 
 	def __str__(self):
 		#!
-		return ' & '.join(['(' + str(val)+' <-> ('+' ^ '.join(map(str, c)) + '))' for val, c in self.content])
+		return ' & '.join(['(' + self.resolve_variable(val) + \
+			' <-> (' + self.__resolve_xor(c) + '))' for val, c in self.content])
+
+	def resolve_variable(self, var):
+		return super().resolve_variable(var)
 
 class  GreaterThen(Expression):
 	def __init__(self, x, y):
@@ -188,9 +220,12 @@ class  GreaterThen(Expression):
 		#!
 		return (0, (x + (-y))[0][0])
 
+	def resolve_variable(self, var):	
+		return super().resolve_variable(var)
+
 	def __str__(self):
 		#!
-		return '<->'.join(map(str, self.content))
+		return ' <-> '.join(map(self.resolve_variable, self.content))
 
 class  LessThen(Expression):
 	def __init__(self, x, y):
@@ -214,6 +249,9 @@ class  LessThen(Expression):
 		#!
 		return (1, (x + (-y))[0][0])
 
+	def resolve_variable(self, var):
+		return super().resolve_variable(var)
+
 	def __str__(self):
 		#!
-		return '<->'.join(map(str, self.content))
+		return ' <-> '.join(map(self.resolve_variable, self.content))
