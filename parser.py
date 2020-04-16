@@ -25,8 +25,8 @@ class Lexer(object):
 		buff = ''
 		for i in range(len(pgm)):
 			buff += pgm[i]
-
-			__buff = buff.strip()
+			print(buff)
+			__buff = buff#.strip()
 			for k, v in self.lang.items():
 				if re.match(k, __buff) != None:
 					res += [(__buff, v)]
@@ -189,6 +189,27 @@ def parse_cmd(cmd):
 			_c2 = _c2_1 + _c2_2
 
 		return _c1 < _c2
+
+def parse_wp(wp):
+	res = '' ; buf = ''
+	is_eq = False
+	for c in wp:
+		if not is_eq:
+			if c.isdigit():
+				buf += c
+				is_eq = True
+				continue
+
+			res += c
+		else:
+			if c.isdigit():
+				buf += c
+				res += str(parse_cmd(buf))
+				buf = ''
+				is_eq = False
+				continue
+			buf += c
+	return res
 
 
 def parse_cmds(cmds):
