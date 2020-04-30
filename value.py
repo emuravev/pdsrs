@@ -64,7 +64,8 @@ class Value(Expression):
 		return 'NoI'
 
 class IntValue(Value):
-	def __init__(self, value, base: int=4):
+	def __init__(self, value, base: int=6):
+		self._val = value
 		if type(value) == int:
 			self.content = self.__translate(value=value, base=base)
 		elif type(value) == list:
@@ -72,12 +73,12 @@ class IntValue(Value):
 		else:
 			raise TypeError('{}'.format(type(value)))
 
-	def __translate(self, value: int, base: int=4) -> list:
+	def __translate(self, value: int, base: int=6) -> list:
 		if value > 0:
-			res = '{0:04b}'.format(value)
+			res = '{0:06b}'.format(value)
 		else:
 			value += 1
-			res = '{0:04b}'.format(value)
+			res = '{0:06b}'.format(value)
 			res = ''.join([('0' if i == '1' else '1') for i in res])
 		res = [int(i) for i in res]
 
@@ -89,7 +90,7 @@ class IntValue(Value):
 		return IntValue(x)
 
 class VarValue(Value):
-	def __init__(self, name, base: int=4):
+	def __init__(self, name, base: int=6):
 		if type(name) == str:
 			self.content = self.__translate(name=name, base=base)
 		elif type(name) == IntValue:
@@ -105,7 +106,6 @@ class VarValue(Value):
 		return [x + '_' + i for x, i in zip([name for _ in name*base], map(str, range(base)))]
 
 	def __from_IntValue(self, name):
-		#!
 		return list(map(lambda a: (1 if a == 1 else 0), name))
 
 	def __neg__(self):
@@ -115,18 +115,9 @@ class VarValue(Value):
 
 class Compare(Expression):
 	def __init__(self, x, y):
-		#if type(x) != VarValue and type(x) != IntValue:
-	#		raise TypeError('{}'.format(type(x)))
-	#	if type(y) != VarValue and type(y) != IntValue:
-#			raise TypeError('{}'.format(type(y)))
-
 		if (type(x) == VarValue or type(x) == IntValue) and\
 		   (type(y) == VarValue or type(y) == IntValue):
 			self.content = self.__create(x=x.content, y=y.content)
-		#elif type(x) == Addition:
-		#	self.content = self.__create(x=[i[0] for i in x], y=y.content)
-		#elif type(y) == Addition:
-		#	self.content = self.__create(x=x.content, y=[i[0] for i in y])
 		else:
 			raise TypeError
 
@@ -157,7 +148,7 @@ class Addition(Expression):
 
 	def __intint_create(self, x:list, y:list) -> list:
 		x, y = list(reversed(x)), list(reversed(y))
-		z = [(x[0] ^ y[0], (x[0],y[0]))]#,None))]
+		z = [(x[0] ^ y[0], (x[0],y[0]))]
 		carry = x[0] & y[0]
 		for i in range(1, len(x)):
 			z += [(x[i] ^ y[i] ^ carry, (x[i], y[i], carry))]
@@ -191,7 +182,6 @@ class Addition(Expression):
 			return Compare(VarValue([i[0] for i in self.content]),other)
 
 	def __str__(self):
-		#!
 		return ' & '.join(['(' + self.resolve_variable(val) + \
 			' <-> (' + self.__resolve_xor(c) + '))' for val, c in self.content])
 
@@ -217,14 +207,12 @@ class  GreaterThen(Expression):
 		return (0, (x + (-y))[0][0])
 
 	def __varvar_create(self, x, y):
-		#!
 		return (0, (x + (-y))[0][0])
 
 	def resolve_variable(self, var):	
 		return super().resolve_variable(var)
 
 	def __str__(self):
-		#!
 		return ' <-> '.join(map(self.resolve_variable, self.content))
 
 class  LessThen(Expression):
@@ -246,12 +234,10 @@ class  LessThen(Expression):
 		return (1, (x + (-y))[0][0])
 
 	def __varvar_create(self, x, y):
-		#!
 		return (1, (x + (-y))[0][0])
 
 	def resolve_variable(self, var):
 		return super().resolve_variable(var)
 
 	def __str__(self):
-		#!
 		return ' <-> '.join(map(self.resolve_variable, self.content))
