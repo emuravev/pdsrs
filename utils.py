@@ -75,7 +75,7 @@ def revpolishnotation(expr):
 				output.append(operators.pop())
 			operators.pop()
 		else:
-			while len(operators) and precedence(operators[-1]) > precedence(expr[i]) and operators[-1] != '(':
+			while len(operators) and precedence(operators[-1]) >= precedence(expr[i]) and operators[-1] != '(':
 				output.append(operators.pop())
 			operators.append(expr[i])
 		i += 1
