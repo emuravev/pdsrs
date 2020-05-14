@@ -1,0 +1,21 @@
+d := 0 ; x := 1 ; y := 1 ; z := 1 ; f := 4 ; 
+
+if ( x > y ) 
+then ( 
+     if ( x > z )
+     then ( 
+          if ( x > f ) then ( d := 1 ) else ( d := 4 ) 
+     ) 
+     else ( 
+          if ( z > f ) then ( d := 3 ) else ( d := 4 ) 
+     ) 
+) 
+else ( 
+     if ( y > z ) 
+     then ( 
+          if ( y > f ) then ( d := 2 ) else ( d := 4 ) 
+     ) 
+     else ( 
+          if ( z > f ) then ( d := 3 ) else ( d := 4 ) 
+     ) 
+)

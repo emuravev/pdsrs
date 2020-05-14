@@ -1,0 +1,9 @@
+d := 0 ; x := 2 ; y := 2 ; z := 2 ; f := 2 ; 
+
+if ( x + y > z + f ) 
+then ( 
+     if ( x > y ) then ( d := 1 ) else ( d := 2 ) 
+) 
+else ( 
+     if ( z > f ) then ( d := 3 ) else ( d := 4 ) 
+)

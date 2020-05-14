@@ -1,0 +1,32 @@
+x := 0 ; 
+a := 1 ; b := 1 ; c := 2 ; d := 1 ; e := 1 ; f := 1 ; 
+g := 1 ; h := 1 ; y := 1 ; j := 1 ; k := 1 ; l := 1 ;  
+
+if ( a + b + c + d + e + f > g + h + y + j + k + l ) 
+then ( 
+     if ( a + b + c > d + e + f ) 
+     then ( 
+          if ( a > b ) 
+	  then ( if ( a > c ) then ( x := 1 ) else ( x := 3 ) ) 
+	  else ( if ( b > c ) then ( x := 2 ) else ( x := 3 ) ) 
+     ) 
+     else ( 
+          if ( d > e ) 
+          then ( if ( d > f ) then ( x := 4 ) else ( x := 6 ) ) 
+          else ( if ( e > f ) then ( x := 5 ) else ( x := 6 ) ) 
+     ) 
+) 
+else ( 
+     if ( g + h + y > j + k + l ) 
+     then ( 
+          if ( g > h ) 
+          then ( if ( g > y ) then ( x := 7 ) else ( x := 9 ) ) 
+          else ( if ( h > y ) then ( x := 8 ) else ( x := 9 ) ) 
+     ) 
+     else ( 
+          if ( j > k ) 
+          then ( if ( j > l ) then ( x := 10 ) else ( x := 12 ) ) 
+          else ( if ( k > l ) then ( x := 11 ) else ( x := 12 ) ) 
+     ) 
+) 
+

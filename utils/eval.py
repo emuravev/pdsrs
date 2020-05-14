@@ -87,5 +87,3 @@ def revpolishnotation(expr):
 
 def evaluate(expr):
 	return calc(revpolishnotation(expr))
-
-#print(evaluate(input().strip()))

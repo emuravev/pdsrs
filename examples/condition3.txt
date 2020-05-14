@@ -1,0 +1,9 @@
+a := 1 ; 
+
+if ( a > 2 ) 
+then ( a := 2 ) 
+else ( a := 5 ) ; 
+
+if ( a > 3 ) 
+then ( a := 4 ) 
+else ( a := 5 )

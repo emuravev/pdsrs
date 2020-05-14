@@ -1,0 +1,8 @@
+d := 0 ; x := 1; y := 1 ; z := 1 ;
+
+if ( x > y ) 
+then ( 
+      if ( x > z ) then ( d := 1 ) else ( d := 3 ) ) 
+else ( 
+      if ( y > z ) then ( d := 2 ) else ( d := 3 ) 
+     )

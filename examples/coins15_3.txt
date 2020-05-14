@@ -1,0 +1,65 @@
+x := 0 ; 
+a := 1 ; b := 2 ; c := 1 ; d := 1 ; e := 1 ; f := 1 ; g := 1 ; 
+h := 1 ; y := 1 ; j := 1 ; k := 1 ; l := 1 ; m := 1 ; n := 1 ; 
+o := 1 ; 
+	   		
+if ( a + b + c + d + e + f + g > h + y + j + k + l + m + n ) 
+then ( 
+     if ( a + b + c > d + e + f ) 
+     then ( 
+          if ( a + b > g + o ) 
+          then ( 
+               if ( a > b ) 
+               then ( if ( a > c ) then ( x := 1 ) else ( x := 3 ) ) 
+               else ( if ( b > c ) then ( x := 2 ) else ( x := 3 ) ) 
+          ) 
+          else ( 
+               if ( g > o ) 
+               then ( if ( g > c ) then ( x := 7 ) else ( x := 3 ) ) 
+               else ( if ( o > c ) then ( x := 15 ) else ( x := 3 ) ) 
+          ) 
+     ) 
+     else (  
+          if ( d + e > g + o ) 
+          then ( 
+               if ( d > e ) 
+               then ( if ( d > f ) then ( x := 4 ) else ( x := 6 ) ) 
+               else ( if ( e > f ) then ( x := 5 ) else ( x := 6 ) )  
+          ) 
+          else ( 
+               if ( g > o ) 
+               then ( if ( g > f ) then ( x := 7 ) else ( x := 6 ) ) 
+               else ( if ( o > f ) then ( x := 15 ) else ( x := 6 ) ) 
+          ) 
+     ) 
+) 
+else ( 
+     if ( h + y + j > k + l + m ) 
+     then ( 
+          if ( h + y > n + o ) 
+          then ( 
+               if ( h > y ) 
+               then ( if ( h > j ) then ( x := 8 ) else ( x := 10 ) ) 
+               else ( if ( y > j ) then ( x := 9 ) else ( x := 10 ) ) 
+          ) 
+          else ( 
+               if ( n > o ) 
+               then ( if ( n > j ) then ( x := 14 ) else ( x := 10 ) ) 
+               else ( if ( o > j ) then ( x := 15 ) else ( x := 10 ) ) 
+          ) 
+     ) 
+     else ( 
+          if ( k + l > n + o ) 
+          then ( 
+               if ( k > l ) 
+               then ( if ( k > m ) then ( x := 11 ) else ( x := 13 ) ) 
+               else ( if ( l > m ) then ( x := 12 ) else ( x := 13 ) ) 
+          ) 
+          else ( 
+               if ( n > o ) 
+               then ( if ( n > m ) then ( x := 14 ) else ( x := 13 ) ) 
+               else ( if ( o > m ) then ( x := 15 ) else ( x := 13 ) ) 
+          ) 
+     ) 
+) 
+
